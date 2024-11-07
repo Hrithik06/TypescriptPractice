@@ -14,7 +14,11 @@ let isLoggedIn: boolean = false;
 
 let yo: string;
 yo = "er";
-console.log();
 console.log(yo);
+let hero;
+function getHero(): string {
+  return "tony";
+}
+hero = getHero();
 
 export {};
