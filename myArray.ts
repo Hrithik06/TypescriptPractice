@@ -1,8 +1,8 @@
-// const superHeroes = []
+// const superHeroes = [];
 // superHeroes.push("batman"); // error never type
 
-// const superHeroes: [] = []
-//  superHeroes.push("batman"); // error never type
+// const superHeroes: [] = [];
+// superHeroes.push("batman"); // error never type
 
 // Both are valid Syntax
 // const superHeroes: string[] = []
