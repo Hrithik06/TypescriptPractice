@@ -487,3 +487,53 @@ const hrithik: Admin = {
 ```
 
 Make sure interface name is not same as any of the package names
+
+# Class
+
+```typescript
+class User {
+  email: string;
+  name: string;
+  readonly city: string;
+  constructor(email: string, name: string) {
+    this.email = email;
+    this.name = name;
+  }
+}
+const hrithik = new User("h@h.com", "hrithik");
+```
+
+## Type Modifiers
+
+- Private: can only be accessed within the class in which it is defined.(`#`name or `private` name)
+- Public(default): can be accessed from any part of the program.
+
+```typescript
+class User {
+  public email: string;
+  private name: string;
+  readonly city: string;
+  constructor(email: string, name: string) {
+    this.email = email;
+    this.name = name;
+  }
+}
+const hrithik = new User("h@h.com", "hrithik");
+hrithik.name; //ERROR
+```
+
+### A cleaner way to write classes
+
+```typescript
+class User {
+  readonly city: string = "NewYork";
+  constructor(
+    public email: string,
+    private name: string,
+    private userId: string
+  ) {}
+}
+const hrithik = new User("h@h.com", "hrithik");
+```
+
+### Getters and Setters
