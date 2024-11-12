@@ -1,7 +1,7 @@
 // the translated JS code is very big
 enum SeatChoice {
   AISLE = "aisle",
-  MIDDLE = 3,
+  MIDDLE = 4,
   WINDOW,
   FOURTH,
 }

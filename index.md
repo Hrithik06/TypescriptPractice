@@ -360,3 +360,130 @@ newUser.push(true);
 ```
 
 # ENUMS
+
+When you want to restrict the choice to user. A set of named constants. By default enum value starts from 0 and subsequent enums have incremented values. If the first enum's value is changed, the subsequent enums will have values incremented by 1.
+
+```typescript
+enum SeatChoice {
+  AISLE, //0
+  MIDDLE, //1
+  WINDOW, //2
+  FOURTH, //3
+}
+let mySeat = SeatChoice.AISLE;
+enum SeatChoice {
+  AISLE = 10, //10
+  MIDDLE = 22, //22
+  WINDOW, //23
+  FOURTH, //24
+}
+```
+
+It can have string value too. But if there is a need that the remaining enums have value as nubmers then atleast the first enum value should be initialized
+
+```typescript
+enum SeatChoice {
+  AISLE = "aisle",
+  MIDDLE = 10,
+  WINDOW, //11
+  FOURTH, //12
+}
+```
+
+Any IIFE is created when compiled to JS. ENUM creates a very large code, to decrease the code size use const
+
+```typescript
+const enum SeatChoice2 {
+  AISLE = "aisle",
+  MIDDLE = 3,
+  WINDOW,
+  FOURTH,
+}
+const seat2 = SeatChoice2.AISLE;
+```
+
+Resulting JS
+
+```typescript
+var seat2 = "aisle"; /* SeatChoice2.AISLE */
+```
+
+# Interfaces
+
+Very similar to `type`, starts with keyword `interface`.
+Interface forces to have the variables and methods with the same name but doesn't care what you implement in those methods.
+Methods should have return type.
+TS checks whether a method of same name is present and has same return type. It doesn't care whether all arguments are passed, or no arguments, even parameter name and argument name can be different.
+
+```typescript
+interface User {
+  readonly dbId: number;
+  email: string;
+  userId: number;
+  //   startTrial: () => string;
+  startTrial(): string; //both are same
+  getCoupon(coouponName: string, value: number): number;
+}
+const hrithik: User = {
+  dbId: 144,
+  email: "h@h.com",
+  userId: 45,
+  startTrial: () => {
+    return "10";
+  },
+  getCoupon(): number {
+    return 10;
+  },
+  getCoupon(coouponName: "test10"): number {
+    return 10;
+  },
+  getCoupon(name: "test10", off: 456): number {
+    return 10;
+  },
+};
+```
+
+## Reopening of interface or Adding properties to interface
+
+```typescript
+interface User {
+  githubId: string;
+}
+const hrithik: User = {
+  dbId: 144,
+  email: "h@h.com",
+  userId: 45,
+  startTrial: () => {
+    return "10";
+  },
+  getCoupon(): number {
+    return 10;
+  },
+  githubId: "hi",
+};
+```
+
+### Inheritance
+
+Use `extend` keyword to inherit properties from an interface.
+
+```typescript
+interface Admin extends User {
+  role: "admin" | "ta" | "learner";
+}
+const hrithik: Admin = {
+  dbId: 144,
+  email: "h@h.com",
+  userId: 45,
+  startTrial: () => {
+    return "10";
+  },
+  getCoupon(): number {
+    return 10;
+  },
+  githubId: "hi",
+  role: "learner",
+};
+```
+
+Make sure interface name is not same as any of the package names
