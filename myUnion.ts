@@ -38,11 +38,13 @@ function getDbId(id: number | string) {
 const data: number[] = [1, 2, 3];
 const date2: string[] = ["1", "2", "3"];
 //  if we want array having both number and strings
-const data3: string | number[] = [1, 2, "3"]; // this means either a string or number array
-const data4: string[] | number[] = [1, 2, "3"]; // this means either a string array or number array
+// const data3: string | number[] = [1, 2, "3"]; // this means either a string or number array
+// const data4: string[] | number[] = [1, 2, "3"]; // this means either a string array or number array
 
 const data5: (string | number)[] = [1, 2, "3"]; // this means array can have both number and string
 
+let pi: 3.14 = 3.14;
+pi = 3.145; //throws error
 //security feature allow only certian values
 //usecase sear allotment in aeroplane
 

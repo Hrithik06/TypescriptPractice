@@ -232,3 +232,131 @@ Takes only same type in this case number, cannot contain number array and string
 ```typescript
 const MLModels: number[][] = [[255, 255, 255], []];
 ```
+
+# Union
+
+When there is a case for a variable which can have values of multiple types. Try to keep it as strict as possible, don't add too many types. Pipe symbol is used `|`
+
+```typescript
+let score: number | string = 45;
+score = "58";
+```
+
+Applies for user defined types too.
+
+```typescript
+type User = {
+  name: string;
+  id: number;
+};
+type Admin = {
+  username: string;
+  id: number;
+};
+
+let hrithik: User | Admin = { name: "hrithik", id: 8745 };
+hrithik = { username: "hri87", id: 8745 };
+```
+
+Useful when writing functions, functions can take multiple values or return multiple values
+
+```typescript
+function getDbId(id: number | string) {
+  //API calls
+  console.log(`DB id is : ${id}`);
+}
+getDbId(894684);
+getDbId("8746512");
+```
+
+Problem arises when there is manipulation on these variables.
+
+```typescript
+function getDbId(id: number | string) {
+  //API calls
+  id.toLowerCase(); // throws error: toLowerCase does not exist on type number
+}
+```
+
+Perform a check for type before manipulation.
+
+```typescript
+function getDbId(id: number | string) {
+  //API calls
+  if (typeof id === "string") {
+    id.toLowerCase();
+  }
+}
+```
+
+## Arrays and Union
+
+2 distinct arrays of type number and string
+
+```typescript
+const data: number[] = [1, 2, 3];
+const data2: string[] = ["1", "2", "3"];
+```
+
+### Array containing both string and number values
+
+Frequent Mistakes
+
+```typescript
+const data3: string | number[] = [1, 2, "3"]; // this means either a string or number array
+const data4: string[] | number[] = [1, 2, "3"]; // this means either a string array or number array
+```
+
+Correct Syntax
+
+```typescript
+const data5: (string | number | boolean)[] = [1, 2, "3", true, "8781"]; // this means array can have both number and string
+```
+
+### Making variables to have exact value(Literal Types)
+
+Here pi is of type `3.14`
+
+```typescript
+let pi: 3.14 = 3.14;
+pi = 3.145; //throws error
+```
+
+```typescript
+let seatAllotment: "aisle" | "middle" | "window";
+seatAllotment = "middle";
+seatAllotment = "crew"; // error
+```
+
+# Tuples
+
+When you want to restrict the order of an array
+
+```typescript
+let user: (string | number)[] = [1, "hc"]; // order can be anything
+
+//Strict order
+let user: [string, number, boolean];
+user = ["h", 897, false];
+
+let rgb: [number, number, number] = [255, 204, 36];
+
+type User = [number, string];
+const newUser: User = [125, "asd"];
+```
+
+Some issues with Tuples in TS
+
+- Values inside a Tuple can be overwritten.
+
+```typescript
+newUser[1] = "sdfsdf";
+```
+
+- Allows array methods like push,pop,slice, etc. which destroy the Tuples.
+
+```typescript
+newUser.push(true);
+```
+
+# ENUMS

@@ -14,5 +14,7 @@ const newUser: User = [125, "asd"];
 
 //this is possible
 newUser[1] = "sdsa.com";
-newUser.push(true);
+newUser.push(2);
+console.log(newUser);
+
 export {};
