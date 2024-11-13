@@ -537,3 +537,46 @@ const hrithik = new User("h@h.com", "hrithik");
 ```
 
 ### Getters and Setters
+
+- Annotate with the keyword `get` to create a getter and `set` keyword to create a setter. Both methods can be of same name.
+- A getter always needs to return data.
+- Setters cannot have a return type, not even void.
+- Getters and Setters are normally used to expose private properties with some transformation, manipulation, but can be used for public properties too.
+
+```typescript
+class User {
+  private _courseCount = 1;
+  readonly city: string = "NewYork";
+  constructor(public email: string, private name: string) {}
+
+  get courseContent(): number {
+    return this._courseCount;
+  }
+  set courseContent(courseNum: number) {
+    this._courseCount = courseNum;
+  }
+
+  get getAppleEmail(): string {
+    return `apple${this.email}`;
+  }
+  //Not accessible outside the class
+  private deleteToken() {
+    console.log("Token deleted");
+  }
+}
+```
+
+Usage:\
+`Getter`
+
+```typescript
+const hrithik = new User("h@h.com", "hrithik");
+console.log(hrithik.courseContent);
+```
+
+`Setter`
+
+```typescript
+const hrithik = new User("h@h.com", "hrithik");
+hrithik.courseContent = 5;
+```
