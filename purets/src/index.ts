@@ -40,62 +40,100 @@
 // hrithik.courseContent = 5;
 // console.log(hrithik);
 
-class User {
-  protected _courseCount = 1;
-  readonly city: string = "NewYork";
-  constructor(public email: string, private name: string) {}
+// class User {
+//   protected _courseCount = 1;
+//   readonly city: string = "NewYork";
+//   constructor(public email: string, private name: string) {}
 
-  get courseContent(): number {
-    return this._courseCount;
-  }
-  set courseContent(courseNum: number) {
-    this._courseCount = courseNum;
-  }
+//   get courseContent(): number {
+//     return this._courseCount;
+//   }
+//   set courseContent(courseNum: number) {
+//     this._courseCount = courseNum;
+//   }
 
-  get getAppleEmail(): string {
-    return `apple${this.email}`;
-  }
-  //Not accessible outside the class
-  private deleteToken() {
-    console.log("Token deleted");
+//   get getAppleEmail(): string {
+//     return `apple${this.email}`;
+//   }
+//   //Not accessible outside the class
+//   private deleteToken() {
+//     console.log("Token deleted");
+//   }
+// }
+// class SubUser extends User {
+//   isFamily: boolean = true;
+//   set changeCourseCount(n: number) {
+//     this._courseCount = 5;
+//   }
+// }
+// const hrithik = new SubUser("h@h.com", "hrithik");
+// hrithik.changeCourseCount = 15;
+// console.log(hrithik);
+// interface TakePhoto {
+//   cameraMode: string;
+//   filter: string;
+//   burst: number;
+// }
+
+// class Instagram implements TakePhoto {
+//   constructor(
+//     public cameraMode: string,
+//     public filter: string,
+//     public burst: number
+//   ) {}
+// }
+// interface Story {
+//   createStory(): void;
+// }
+// class Youtube implements TakePhoto, Story {
+//   constructor(
+//     public cameraMode: string,
+//     public filter: string,
+//     public burst: number,
+//     public short: string
+//   ) {}
+//   createStory(): void {
+//     console.log("Story");
+//   }
+// }
+
+// const yt = new Youtube("f", "e", 5, "d");
+// console.log(yt);
+
+// class TakePhoto {
+//   constructor(public cameraMode: string) {}
+// }
+// class User {
+//   private userId: string;
+//   constructor(email: string, private name: string) {
+//     this.userId = "";
+//   }
+// }
+
+abstract class TakePhoto {
+  constructor(public cameraMode: string, public filter: string) {}
+  abstract getSepia(): void;
+  setReelTime(): number {
+    // Calculations
+    return 6;
   }
 }
-class SubUser extends User {
-  isFamily: boolean = true;
-  set changeCourseCount(n: number) {
-    this._courseCount = 5;
-  }
-}
-const hrithik = new SubUser("h@h.com", "hrithik");
-hrithik.changeCourseCount = 15;
-console.log(hrithik);
-interface TakePhoto {
-  cameraMode: string;
-  filter: string;
-  burst: number;
-}
 
-class Instagram implements TakePhoto {
+class Instagram extends TakePhoto {
   constructor(
     public cameraMode: string,
     public filter: string,
     public burst: number
-  ) {}
-}
-interface Story {
-  createStory(): void;
-}
-class Youtube implements TakePhoto, Story {
-  constructor(
-    public cameraMode: string,
-    public filter: string,
-    public burst: number,
-    public short: string
-  ) {}
-  createStory(): void {
-    console.log("Story");
+  ) {
+    super(cameraMode, filter);
+  }
+  getSepia(): void {
+    console.log("sepia");
   }
 }
 
-const yt = new Youtube("f", "e", 5, "d");
-console.log(yt);
+const ins = new Instagram("test", "test1", 8);
+console.log(ins);
+
+ins.getSepia(); //sepia
+console.log(ins.setReelTime()); //6
