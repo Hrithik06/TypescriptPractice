@@ -102,7 +102,7 @@ function handleError(errorMsg: string): never {
 function creaeteUser({ name: string, isPaid: boolean }) {} // wrong this is destructuring. Invalid Syntax
 ```
 
-### Bad behaviour of objs in TS
+### Bad behaviour of objects in TS
 
 ```typescript
 const User = {
@@ -719,4 +719,361 @@ console.log(ins.setReelTime()); //6
 
 # Generics
 
+Generics are used to define reusable components.
 Arrays are Generics BTS.
+To have generic method which can have different type of parameter and return type, we have 2 ways:
+
+- This becomes verbose to include different types
+
+```typescript
+function identity(val: string | boolean): string | boolean {
+  return val;
+}
+```
+
+- Here information about type is lost and parameter can be string return type can be any other type.
+
+```typescript
+function identity(val: any): any {
+  return val;
+}
+```
+
+Generics:
+
+```typescript
+function identity<Type>(val: Type): Type {
+  return val;
+}
+function identity<T>(val: T): T {
+  return val;
+}
+interface Bottle {
+  brand: string;
+  type: string;
+}
+function identity<Bottle>(val: Bottle): Bottle {
+  return val;
+}
+```
+
+### Generics and Arrays
+
+Parameters: Array of type T/Type.
+Return: Variable for type T/Type.
+
+```typescript
+function getSearchProduct<T>(products: T[]): T {
+  //DB operations
+  const myIndex = 3;
+  return products[myIndex];
+}
+```
+
+### Arrow Functions and Generics
+
+```typescript
+const getSearchProduct = <T>(products: T[]): T => {
+  //DB operations
+  const myIndex = 3;
+  return products[myIndex];
+};
+```
+
+Sometimes React Devs keep comma to mention that this is not a JSX syntax but a TypeScript Generic syntax.
+
+```typescript
+const getSearchProduct = `<T,>`(products: T[]): T => {
+  //DB operations
+  const myIndex = 3;
+  return products[myIndex];
+};
+```
+
+`More on Generics`\
+Here, valTwo should always be a number, but this defeats the purpose of Generics.
+
+```typescript
+const anotherFunction = <T, U extends number>(valOne: T, valTwo: U): object => {
+  return {
+    valOne,
+    valTwo,
+  };
+};
+```
+
+Here valTwo is of type Database.
+
+```typescript
+interface Database {
+  connection: string;
+  username: string;
+  password: string;
+}
+const anotherFunction = <T, U extends Database>(
+  valOne: T,
+  valTwo: U
+): object => {
+  return {
+    valOne,
+    valTwo,
+  };
+};
+```
+
+Do not confuse with below example. Here Database is just a placeholder as T and it is not related to `Database Interface` which defines the type,it does not enforce any structure. Therfore valTwo is of not type Database, it can by anything as is T.
+
+```typescript
+const anotherFunction = <T, Database>(valOne: T, valTwo: Database): object => {
+  return {
+    valOne,
+    valTwo,
+  };
+};
+```
+
+### Generic Classes
+
+```typescript
+interface Course {
+  name: string;
+  author: string;
+  subject: string;
+}
+interface Quiz {
+  name: string;
+  type: string;
+}
+class Sellable<T> {
+  public cart: T[] = [];
+  addToCart(product: T) {
+    this.cart.push(product);
+  }
+}
+const c: Course = {
+  name: "MathBaby",
+  author: "DJ_Jamil",
+  subject: "Math",
+};
+const sell = new Sellable<Course>();
+sell.addToCart({
+  name: "MyBoyMath",
+  author: "DJ_Jamil",
+  subject: "Y",
+});
+
+sell.addToCart(c);
+
+console.log(sell);
+```
+
+# Narrowing
+
+### Type Narrowing(`typeof` type guard)
+
+| Type             | Result      |
+| ---------------- | ----------- |
+| Undefined        | "undefined" |
+| Null             | "object"    |
+| Boolean          | "boolean"   |
+| Number           | "number"    |
+| BigInt           | "bigint"    |
+| String           | "string"    |
+| Symbol           | "symbol"    |
+| Any other object | "object"    |
+| Any Array        | "object"    |
+| Function         | "function"  |
+| Class\*          | "function"  |
+
+\* Function (implements [[Call]] in ECMA-262 terms; classes are functions as well)
+
+- Add `typeof` for typesafety
+
+```typescript
+function detectType(val: string | number | number[]) {
+  if (typeof val === "string") {
+    return val.toLowerCase();
+  }
+  //typecheck for number[] array
+  if (typeof val === "object") {
+    return val;
+  }
+  return val + 6;
+}
+
+const provideId = (id: string | null) => {
+  //typecheck for null
+  if (!id) {
+    console.log("Please procide ID");
+    return;
+  }
+  //toLowerCase not avialble on null
+  return id.toLowerCase();
+};
+```
+
+- In below case empty string is not handled, as emty string is falsy it does not go inside the if condition. There can be some business case when string is emtpy.
+
+```typescript
+function printAll(strs: string | string[] | null) {
+  // !!!!!!!!!!!!!!!!
+  //  DON'T DO THIS!
+  // !!!!!!!!!!!!!!!!
+  if (strs) {
+    if (typeof strs === "object") {
+      for (const s of strs) {
+        console.log(s);
+      }
+    } else if (typeof strs === "string") {
+      console.log(strs);
+    }
+  }
+}
+```
+
+### `in` operator Narrowing
+
+- `in` operator to check a property exists in a object or not.
+
+```typescript
+interface User {
+  name: string;
+  email: string;
+}
+interface Admin {
+  name: string;
+  email: string;
+  isAdmin: boolean;
+}
+const isAdminAcoount = (account: User | Admin) => {
+  if ("isAdmin" in account) {
+    return account.isAdmin;
+  }
+};
+```
+
+### `instanceof` Narrowing
+
+Anything can be created/constructed using `new` keyword like Date, Array, Object, Class etc.. there `instanceof` can be used. It is smilar to `typeof`, typeof checks for default types, instanceof check whether this object is instance of this class.
+
+```typescript
+function logValue(x: Date | string) {
+  if (x instanceof Date) {
+    console.log(x.toUTCString());
+  } else {
+    console.log(x.toUpperCase());
+  }
+}
+```
+
+### Type Predicates
+
+Below example, when we reach inside `<if (isFish(pet)) >`, the pet should have been truly identified as Fish and as Bird in `<else>` but it is not. This does not cause error but the function isFish is not properly identifying, TS is still confused on whether its a Fish or a Bird.
+Below example, even if isFish true, TS doesn't know the type of pet is it, isFish is just returning boolean but no where it returns the type of Fish or Bird.
+
+```typescript
+type Fish = {
+  swim: () => void;
+};
+type Bird = {
+  fly: () => void;
+};
+
+function isFish(pet: Fish | Bird) {
+  //pet is typecasted as Fish
+  return (pet as Fish).swim !== undefined;
+}
+
+function getFood(pet: Fish | Bird) {
+  console.log(isFish(pet));
+
+  if (isFish(pet)) {
+    pet.swim(); // here TS still doesn't know the type of pet
+    return "fish food";
+  } else {
+    pet.fly(); // here TS still doesn't know the type of pet
+    return "bird food";
+  }
+}
+```
+
+So, instead of returning a boolean, we can use `pet is Fish` which it is being type casted as a particular type. At this point typescript will be 100% sure, it is Fish.
+
+```typescript
+function isFish(pet: Fish | Bird): pet is Fish {
+  //pet is typecasted as Fish
+  return (pet as Fish).swim !== undefined;
+}
+```
+
+### Discrimanted Unions
+
+Having a property of exact name in all interfaces and check the value of that property using dot(.) operator.
+
+```typescript
+interface Circle {
+  kind: "circle";
+  radius: number;
+}
+interface Square {
+  kind: "square";
+  side: number;
+}
+type Shape = Circle | Square;
+const getArea = (shape: Shape): number => {
+  if (shape.kind === "circle") {
+    return Math.PI * shape.radius ** 2;
+  }
+  return shape.side ** 2;
+};
+```
+
+### Never Type and Exhaustiveness checking
+
+When narrowing, you can reduce the options of a union to a point where you have removed all possibilities and have nothing left. In those cases, TypeScript will use a never type to represent a state which shouldn’t exist.
+For example, adding a default to our getArea function which tries to assign the shape to never will not raise an error when every possible case has been handled.
+
+```typescript
+const getArea = (shape: Shape): number => {
+  switch (shape.kind) {
+    case "circle":
+      return Math.PI * shape.radius ** 2;
+    case "square":
+      return shape.side ** 2;
+    default:
+      const _defaultforshape: never = shape;
+      return _defaultforshape;
+  }
+};
+```
+
+If there is a new interface in future and can be of type, then TS throws error: `Type 'Rectangle' is not assignable to type 'never'`. As type Rectangle is not checked. As Rectangle is made as type `never` which should never be used that is why it is important to have default case.
+
+```typescript
+interface Rectangle {
+  kind: "rectangle";
+  length: number;
+  width: number;
+}
+
+type Shape = Circle | Square | Rectangle;
+
+const getArea = (shape: Shape): number => {
+  switch (shape.kind) {
+    case "circle":
+      return Math.PI * shape.radius ** 2;
+    case "square":
+      return shape.side ** 2;
+    default:
+      const _defaultforshape: never = shape;
+      return _defaultforshape;
+  }
+};
+```
+
+So add a case which covers Rectangle such that type `never` is never assigned as a shape.
+
+```typescript
+    case "square":
+      return shape.length * shape.width;
+```
